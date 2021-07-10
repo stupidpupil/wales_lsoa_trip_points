@@ -17,7 +17,7 @@ centroids %>% select(LSOA11CD) %>%
 
 
 places_from_areas <- st_read("data-raw/wales_ish.places.gpkg", layer='multipolygons') %>%
-  st_point_on_surface() %>% select(-any_of(c('osm_way_id')))
+  st_point_on_surface() %>% select(-any_of(c('osm_way_id')) )
 
 places <- (places_from_areas %>% rbind(st_read("data-raw/wales_ish.places.gpkg", layer='points'))) %>%
   filter(
@@ -33,6 +33,14 @@ places <- (places_from_areas %>% rbind(st_read("data-raw/wales_ish.places.gpkg",
       !is.na(railway) ~ 'Railway station',
       amenity == 'pub' ~ 'Pub',
       TRUE ~ str_to_title(place)
+    ),
+
+    distance_multiplier = case_when(
+      place_type == 'Pub' ~ 2.0,
+      place_type == 'Bus stop' ~ 0.95,
+      place_type == 'Railway station' ~ 0.95,
+      place_type %in% c('Town', 'Suburb', 'Quarter') ~ 0.75,
+      TRUE ~ 1.0
     )
   ) %>%
   st_join(boundaries)
@@ -64,8 +72,11 @@ possible_places$distance_to_lsoa11_centroid <-
   possible_places %>%
   st_distance(centroids_for_distances, by_element=TRUE)
 
+possible_places <- possible_places %>% 
+  mutate(adjusted_distance = distance_multiplier * distance_to_lsoa11_centroid)
+
 chosen_places <- possible_places %>%
-  group_by(LSOA11CD) %>% arrange(LSOA11CD, distance_to_lsoa11_centroid) %>% slice(1L) %>% 
+  group_by(LSOA11CD) %>% arrange(LSOA11CD, adjusted_distance) %>% slice(1L) %>% 
   mutate(distance_to_lsoa11_centroid_metres = as.integer(distance_to_lsoa11_centroid)) %>%
   rename(place_name = name) %>%
   select(LSOA11CD, place_type, place_name, distance_to_lsoa11_centroid_metres) %>% rename(geometry=geom)

@@ -23,7 +23,7 @@ This repository contains code to generate geographical trip-points for each 2011
 It attempts to address the problem that for some LSOAs, particularly rural ones, the [population-weighted centroid](https://geoportal.statistics.gov.uk/documents/b20460edf2f3459fa7d2771eacab51fc/explore) might be in the middle of nowhere - far away from any actual place, public transport stop or road. Trip planners may not be able to find routes to and from these centroids.
 
 These "trip-points" are generated in a two-step process:
-1. For roughly the third of Welsh LSOAs with the greatest areas, I find the village, town, bus stop, train station or pub nearest to the population-weighted centroid.
+1. For roughly the third of Welsh LSOAs with the greatest areas, I find the town, village, bus stop, train station or pub nearest to the population-weighted centroid (with a slight preference towards places earlier in that list).
 
 2. For each LSOA, I find the nearest motor-vehicle accessible road to a) the place found in the first step for the 600 or so biggest LSOAs or b) the population-weighted centroid for the 1,300 or so remaining LSOAs.
 
@@ -65,3 +65,9 @@ These datasets include:
  - [LSOA11 Boundaries](https://geoportal.statistics.gov.uk/datasets/ons::lower-layer-super-output-areas-december-2011-boundaries-super-generalised-clipped-bsc-ew-v3/about)
 
  They are also derived from information about places and roads obtained from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [Geofabrik.de](https://download.geofabrik.de/europe/great-britain.html), under the [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+
+## Known Issues
+
+- Some routers (including OpenTripPlanner) may have issues navigating from roads that don't have access restrictions themselves but are accessible only via roads that do. 
+
+- Not all bus stops and railway stations are mapped in OpenStreetMap. In particular, many of the former are missing from rural parts of Wales. This may lead to suboptimal place selection in the first step. (An alternative might be to use the NaPTAN database.)
