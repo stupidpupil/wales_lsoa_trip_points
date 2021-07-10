@@ -4,28 +4,27 @@ This repository contains code to generate geographical trip-points for each 2011
 
 It attempts to address the problem that for some LSOAs, particularly rural ones, the [population-weighted centroid](https://geoportal.statistics.gov.uk/documents/b20460edf2f3459fa7d2771eacab51fc/explore) might be in the middle of nowhere - far away from any actual place, public transport stop or road. Trip planners may not be able to find routes to and from these centroids.
 
-These “trip-points” are generated in the following way:
-- 25 LSOAs have a trip point manually defined,
-- 852 LSOAs with an area bigger than the Welsh median and containing at least one “Community” or “Locality” have their trip point set to the location of the Community or Locality nearest to the population-weighted centroid, and
-- the 1032 remaining LSOAs just use the population-weighted centroid.
+These “trip-points” are generated in a two-step process:
+1. For roughly the third of Welsh LSOAs with the greatest areas, I find the village, town, bus stop, train station or pub nearest to the population-weighted centroid.
 
-## Communities and Localities
+2.  For each LSOA, I find the nearest motor-vehicle accessible road to a) the place found in the first step for the 600 or so biggest LSOAs or b) the population-weighted centroid for the 1,300 or so remaining LSOAs.
 
-These are places described in the [Index of Place Names in Great Britain](https://geoportal.statistics.gov.uk/datasets/e8e725daf8944af6a336a9d183114697/about). “Localities” are “villages, hamlets and localities without legally defined boundaries” and “Communities” are the [smallest areas of civil administration in Wales](https://webarchive.nationalarchives.gov.uk/20160112001128/http://www.ons.gov.uk/ons/guide-method/geography/beginner-s-guide/administrative/england/parishes-and-communities/index.html).
+The first step attempts to find points where it might actually be possible to start a public transport journey, while the second step all but guarantees that it will be possible to start a car-based journey.
 
 ## Distance of Trip-points from Centroids
 
-The plot below shows the distance of the trip-point from the population-weighted centroids for the LSOAs where the two differ.
+The plot below shows the distance of the trip-point from the population-weighted centroids for each LSOA.
 
 ![](distance_plot.png)
 
 ## License
 
-The code and trip-points are licensed under the [MIT licence](https://opensource.org/licenses/MIT).
+The trip-points are made available under the [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1-0/) by Adam Watkins.
 
-The trip-points are derived from several datasets provided by the Office for National Statistics licensed under the Open Government Licence v.3.0 and containing OS Data © Crown copyright and database right 2021, reproduced in the *data-raw* directory.
+The trip-points are derived from several datasets provided by the Office for National Statistics licensed under the Open Government Licence v.3.0 and contain OS Data © Crown copyright and database right 2021.
 
 These datasets include:
-- [Index of Place Names in Great Britain](https://geoportal.statistics.gov.uk/datasets/e8e725daf8944af6a336a9d183114697/about)
 - [LSOA11 Population-Weighted Centroids](https://geoportal.statistics.gov.uk/datasets/ons::lower-layer-super-output-areas-december-2011-population-weighted-centroids/about)
 - [LSOA11 Boundaries](https://geoportal.statistics.gov.uk/datasets/ons::lower-layer-super-output-areas-december-2011-boundaries-super-generalised-clipped-bsc-ew-v3/about)
+
+They are also derived from information about places and roads obtained from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [Geofabrik.de](https://download.geofabrik.de/europe/great-britain.html), under the [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1-0/).
