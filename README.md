@@ -4,6 +4,8 @@ This repository contains code to generate geographical trip-points for each 2011
 
 It attempts to address the problem that for some LSOAs, particularly rural ones, the [population-weighted centroid](https://geoportal.statistics.gov.uk/documents/b20460edf2f3459fa7d2771eacab51fc/explore) might be in the middle of nowhere - far away from any actual place, public transport stop or road. Trip planners may not be able to find routes to and from these centroids.
 
+## Method
+
 These “trip-points” are generated in a two-step process:
 1. For roughly the third of Welsh LSOAs with the greatest areas, I find the village, town, bus stop, train station or pub nearest to the population-weighted centroid.
 
@@ -16,6 +18,14 @@ The first step attempts to find points where it might actually be possible to st
 The plot below shows the distance of the trip-point from the population-weighted centroids for each LSOA.
 
 ![](distance_plot.png)
+
+## Advantages and disadvantages of LSOA-level analysis
+
+- Many existing analytical products are only available at LSOA-level or higher, for example [Car and van availability from the 2011 Census](https://www.nomisweb.co.uk/census/2011/qs416ew) and different countries' [Indices of Deprivation](https://github.com/mysociety/composite_uk_imd).
+
+- LSOAs are a relatively manageable number of data points (1909 in Wales) resulting in relatively manageable travel-time matrices (around 3.6 million cells in Wales), in contrast to Output Areas (ten thousand OAs resulting in 100 million cells in a travel time matrix).
+
+- Rural LSOAs can have very large geographical areas containing multiple scattered settlements; a single trip-point for such an area may be extremely unrepresentative, and accessibility - particularly for public transport - determined based on such a point may be quite misleading.
 
 ## License
 
