@@ -13,12 +13,6 @@ These “trip-points” are generated in a two-step process:
 
 The first step attempts to find points where it might actually be possible to start a public transport journey, while the second step all but guarantees that it will be possible to start a car-based journey.
 
-## Distance of Trip-points from Centroids
-
-The plot below shows the distance of the trip-point from the population-weighted centroids for each LSOA.
-
-![](distance_plot.png)
-
 ## Advantages and disadvantages of LSOA-level analysis
 
 - Many existing analytical products are only available at LSOA-level or higher, for example [Car and van availability from the 2011 Census](https://www.nomisweb.co.uk/census/2011/qs416ew) and different countries' [Indices of Deprivation](https://github.com/mysociety/composite_uk_imd).
@@ -27,14 +21,19 @@ The plot below shows the distance of the trip-point from the population-weighted
 
 - Rural LSOAs can have very large geographical areas containing multiple scattered settlements; a single trip-point for such an area may be extremely unrepresentative, and accessibility - particularly for public transport - determined based on such a point may be quite misleading.
 
-## License
+## Known Issues
 
-The trip-points are made available under the [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1-0/) by Adam Watkins.
+- Some routers (including OpenTripPlanner) may have issues navigating from roads that don't have access restrictions themselves but are accessible only via roads that do. 
 
-The trip-points are derived from several datasets provided by the Office for National Statistics licensed under the Open Government Licence v.3.0 and contain OS Data © Crown copyright and database right 2021.
+- Not all bus stops and railway stations are mapped in OpenStreetMap. In particular, many of the former are missing from rural parts of Wales. This may lead to suboptimal place selection in the first step. (An alternative might be to use the NaPTAN database.)
 
-These datasets include:
-- [LSOA11 Population-Weighted Centroids](https://geoportal.statistics.gov.uk/datasets/ons::lower-layer-super-output-areas-december-2011-population-weighted-centroids/about)
-- [LSOA11 Boundaries](https://geoportal.statistics.gov.uk/datasets/ons::lower-layer-super-output-areas-december-2011-boundaries-super-generalised-clipped-bsc-ew-v3/about)
+## How-to
 
-They are also derived from information about places and roads obtained from [OpenStreetMap contributors](https://www.openstreetmap.org/copyright), via [Geofabrik.de](https://download.geofabrik.de/europe/great-britain.html), under the [ODbL v1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+```r
+devtools::load_all()
+decide_lsoas()
+download_osm()
+extract_osm()
+decide_place_points()
+decide_nearest_road_points()
+```
