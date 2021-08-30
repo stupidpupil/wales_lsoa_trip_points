@@ -1,6 +1,6 @@
-# LSOA11 Trip-points for Wales
+# Code to generate LSOA11 Trip-points for Wales
 
-This repository contains code to generate geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales and bordering areas in England for transport-related analysis.
+This repository contains code to generate geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales, and some LSOA11s in bordering areas in England, for transport-related analysis.
 
 You can find [the latest release of these trip-points here](https://github.com/stupidpupil/wales_lsoa_trip_points/tree/points-releases).
 
@@ -9,9 +9,9 @@ It attempts to address the problem that for some LSOAs, particularly rural ones,
 ## Method
 
 These “trip-points” are generated in a two-step process:
-1. For roughly the third of Welsh LSOAs with the greatest areas, I find the village, town, bus stop, train station or pub nearest to the population-weighted centroid.
+1. For roughly the third of the included LSOAs with the greatest areas, I find the village, town, bus stop, train station or pub nearest to the population-weighted centroid.
 
-2.  For each LSOA, I find the nearest motor-vehicle accessible road to a) the place found in the first step for the 600 or so biggest LSOAs or b) the population-weighted centroid for the 1,300 or so remaining LSOAs.
+2.  For each LSOA, I find the nearest motor-vehicle accessible road to a) the place found in the first step for the 850 or so biggest LSOAs or b) the population-weighted centroid for the 1750 or so remaining LSOAs.
 
 The first step attempts to find points where it might actually be possible to start a public transport journey, while the second step all but guarantees that it will be possible to start a car-based journey.
 
