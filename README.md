@@ -1,6 +1,8 @@
 # LSOA11 Trip-points for Wales
 
-This repository contains code to generate geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales for transport-related analysis.
+This repository contains code to generate geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales and bordering areas in England for transport-related analysis.
+
+You can find [the latest release of these trip-points here](https://github.com/stupidpupil/wales_lsoa_trip_points/tree/points-releases).
 
 It attempts to address the problem that for some LSOAs, particularly rural ones, the [population-weighted centroid](https://geoportal.statistics.gov.uk/documents/b20460edf2f3459fa7d2771eacab51fc/explore) might be in the middle of nowhere - far away from any actual place, public transport stop or road. Trip planners may not be able to find routes to and from these centroids.
 

@@ -14,8 +14,13 @@ library(ggplot2)
 library(ggbeeswarm)
 library(sf)
 
-lsoa_trip_points <- st_read("data/lsoa11_nearest_road_points.geojson")
+lsoa_trip_points <- st_read("output/lsoa11_nearest_road_points.geojson")
 ```
+
+This repository geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales and bordering areas in England for transport-related analysis.
+
+You can find [the code used to generate these trip-points here](https://github.com/stupidpupil/wales_lsoa_trip_points/tree/main).
+
 ## Distance of Trip-points from Centroids
 
 The plot below shows the distance of the trip-point from the population-weighted centroids for each LSOA.
