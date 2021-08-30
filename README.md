@@ -19,7 +19,7 @@ The first step attempts to find points where it might actually be possible to st
 
 - Many existing analytical products are only available at LSOA-level or higher, for example [Car and van availability from the 2011 Census](https://www.nomisweb.co.uk/census/2011/qs416ew) and different countries' [Indices of Deprivation](https://github.com/mysociety/composite_uk_imd).
 
-- LSOAs are a relatively manageable number of data points (1909 in Wales) resulting in relatively manageable travel-time matrices (around 3.6 million cells in Wales), in contrast to Output Areas (ten thousand OAs resulting in 100 million cells in a travel time matrix).
+- LSOAs are a relatively manageable number of data points (1909 LSOAs in Wales) resulting in relatively manageable travel-time matrices (around 3.6 million cells in Wales, around 12MiB in a CSV), in contrast to Output Areas (ten thousand OAs resulting in 100 million cells in a travel time matrix).
 
 - Rural LSOAs can have very large geographical areas containing multiple scattered settlements; a single trip-point for such an area may be extremely unrepresentative, and accessibility - particularly for public transport - determined based on such a point may be quite misleading.
 
