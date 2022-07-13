@@ -1,6 +1,6 @@
 # LSOA11 Trip-points for Wales and Bordering Areas
 
-This repository contains geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales, and some LSOA11s in bordering areas in England, for transport-related analysis.
+This repository contains geographical trip-points for each 2011 Lower Layer Super Output Area (LSOA11) in Wales, and some LSOA11s in bordering areas in England, for transport-related analysis (e.g. [generating LSOA-to-LSOA travel time matrices](https://stupidpupil.github.io/lsoa_travel_time_viewer/)).
 
 You can find [the code used to generate these trip-points, and some discussion of the advantages of disadvantages of using these trip-points, here](https://github.com/stupidpupil/wales_lsoa_trip_points/tree/main).
 
