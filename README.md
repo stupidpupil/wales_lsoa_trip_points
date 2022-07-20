@@ -39,4 +39,5 @@ download_osm()
 extract_osm()
 decide_place_points()
 decide_nearest_road_points()
+create_not_included_mask()
 ```
