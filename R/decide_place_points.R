@@ -1,8 +1,8 @@
 decide_place_points <- function(){
 
-  boundaries <- st_read("output/lsoa11_boundaries.geojson")
+  boundaries <- st_read("data-raw/lsoa11_boundaries_subset.geojson")
 
-  centroids <- st_read("data-raw/Lower_Layer_Super_Output_Areas_(December_2011)_Population_Weighted_Centroids.geojson") %>%
+  centroids <- st_read("data-raw/lsoa11_centroids.geojson") %>%
     filter(lsoa11cd %in% boundaries$LSOA11CD) %>%
     rename(LSOA11CD = lsoa11cd)
 

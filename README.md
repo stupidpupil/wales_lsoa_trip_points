@@ -33,6 +33,7 @@ The first step attempts to find points where it might actually be possible to st
 
 ```r
 devtools::load_all()
+download_lsoa_data()
 decide_lsoas()
 download_osm()
 extract_osm()

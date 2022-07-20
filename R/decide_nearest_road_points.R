@@ -44,6 +44,10 @@ decide_nearest_road_points <- function(){
   roads <- ways %>% 
     filter(highway %in% road_tags)
 
+
+  roads <- roads %>%
+    filter(tunnel != "yes" | is.na(tunnel))
+
   lsoa_place_points <- st_read("output/lsoa11_place_points.geojson")
 
   nearest_line <- st_nearest_feature(lsoa_place_points, roads)
