@@ -1,34 +1,36 @@
 decide_lsoas <- function(){
-  lsoa11_boundaries <- st_read("data-raw/lsoa11_boundaries.geojson") %>%
-    select(LSOA11CD, Shape__Area)
+  sf_use_s2(FALSE)
+  lsoa21_boundaries <- st_read("data-raw/lsoa21_boundaries.geojson") %>%
+    select(LSOA21CD, SHAPE_Area)
 
   area_of_interest <- st_read("data-raw/area_of_interest.geojson")
 
-  lsoa11_boundaries <- lsoa11_boundaries[area_of_interest, , op=st_intersects]
+  lsoa21_boundaries <- lsoa21_boundaries[area_of_interest, , op=st_intersects]
 
   # Remove any islands
-  touching_any_others <- lsoa11_boundaries %>% st_touches(lsoa11_boundaries, sparse=FALSE) %>% apply(1, any)
-  lsoa11_boundaries <- lsoa11_boundaries[touching_any_others, ]
+  touching_any_others <- lsoa21_boundaries %>% st_touches(lsoa21_boundaries, sparse=FALSE) %>% apply(1, any)
+  lsoa21_boundaries <- lsoa21_boundaries[touching_any_others, ]
 
   #Require that we have all Welsh LSOAs
-  stopifnot(lsoa11_boundaries %>% filter(LSOA11CD %>% str_detect("^W")) %>% nrow() == 1909)
+  stopifnot(lsoa21_boundaries %>% filter(LSOA21CD %>% str_detect("^W")) %>% nrow() == 1917)
 
-  unlink("data-raw/lsoa11_boundaries_subset.geojson")
-  lsoa11_boundaries %>% st_write("data-raw/lsoa11_boundaries_subset.geojson")
+  unlink("data-raw/lsoa21_boundaries_subset.geojson")
+  lsoa21_boundaries %>% st_write("data-raw/lsoa21_boundaries_subset.geojson")
 
 
   unlink("data-raw/wales_ish_bbox.geojson")
-  lsoa11_boundaries %>% 
+  lsoa21_boundaries %>% 
     st_bbox() %>% 
     st_as_sfc() %>%
     st_write("data-raw/wales_ish_bbox.geojson")
 
 
   # Subset super-generalised
-  unlink("output/lsoa11_boundaries.geojson")
-  st_read("data-raw/lsoa11_boundaries_super_generalised.geojson") %>%
-    filter(LSOA11CD %in% lsoa11_boundaries$LSOA11CD) %>%
-    st_write("output/lsoa11_boundaries.geojson")
+  unlink("output/lsoa21_boundaries.geojson")
+  st_read("data-raw/lsoa21_boundaries_super_generalised.geojson") %>%
+    filter(LSOA21CD %in% lsoa21_boundaries$LSOA21CD) %>%
+    st_write("output/lsoa21_boundaries.geojson")
 
-  return(lsoa11_boundaries)
+  return(lsoa21_boundaries)
 }
+

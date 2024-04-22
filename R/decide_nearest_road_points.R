@@ -48,7 +48,7 @@ decide_nearest_road_points <- function(){
   roads <- roads %>%
     filter(tunnel != "yes" | is.na(tunnel))
 
-  lsoa_place_points <- st_read("output/lsoa11_place_points.geojson")
+  lsoa_place_points <- st_read("output/lsoa21_place_points.geojson")
 
   nearest_line <- st_nearest_feature(lsoa_place_points, roads)
   nearest_line <- roads[nearest_line,] %>% mutate(
@@ -70,13 +70,13 @@ decide_nearest_road_points <- function(){
   st_crs(lsoa_trip_points) <- st_crs(nearest_line)
   lsoa_trip_points$road_name <- nearest_line$road_name
 
-  centroids <- st_read("output/lsoa11_centroids.geojson")
+  centroids <- st_read("output/lsoa21_centroids.geojson")
 
-  lsoa_trip_points <- lsoa_trip_points %>% arrange(LSOA11CD)
-  centroids <- centroids %>% arrange(LSOA11CD)
+  lsoa_trip_points <- lsoa_trip_points %>% arrange(LSOA21CD)
+  centroids <- centroids %>% arrange(LSOA21CD)
 
-  lsoa_trip_points$distance_to_lsoa11_centroid_metres <- st_distance(lsoa_trip_points, centroids, by_element=TRUE) %>% as.integer()
+  lsoa_trip_points$distance_to_lsoa21_centroid_metres <- st_distance(lsoa_trip_points, centroids, by_element=TRUE) %>% as.integer()
 
-  unlink("output/lsoa11_nearest_road_points.geojson")
-  lsoa_trip_points %>% st_write("output/lsoa11_nearest_road_points.geojson")
+  unlink("output/lsoa21_nearest_road_points.geojson")
+  lsoa_trip_points %>% st_write("output/lsoa21_nearest_road_points.geojson")
 }

@@ -4,4 +4,6 @@
 *.places.*
 lsoa11_boundaries*.geojson
 lsoa11_centroids.geojson
+lsoa21_boundaries*.geojson
+lsoa21_centroids.geojson
 wales_ish_bbox.geojson

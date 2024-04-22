@@ -1,14 +1,14 @@
 decide_place_points <- function(){
 
-  boundaries <- st_read("data-raw/lsoa11_boundaries_subset.geojson")
+  boundaries <- st_read("data-raw/lsoa21_boundaries_subset.geojson")
 
-  centroids <- st_read("data-raw/lsoa11_centroids.geojson") %>%
-    filter(lsoa11cd %in% boundaries$LSOA11CD) %>%
-    rename(LSOA11CD = lsoa11cd)
+  centroids <- st_read("data-raw/lsoa21_centroids.geojson") %>%
+    filter(LSOA21CD %in% boundaries$LSOA21CD) %>%
+    rename(LSOA21CD = LSOA21CD)
 
-  unlink("output/lsoa11_centroids.geojson")
-  centroids %>% select(LSOA11CD) %>%
-    st_write("output/lsoa11_centroids.geojson")
+  unlink("output/lsoa21_centroids.geojson")
+  centroids %>% select(LSOA21CD) %>%
+    st_write("output/lsoa21_centroids.geojson")
 
   print("Producing places.gpkg…")
 
@@ -67,52 +67,52 @@ decide_place_points <- function(){
   # we'll use the most central LOC or COM we can find
   #
 
-  lsoa11cds_that_should_use_nearest_place <- places %>%
-    filter(!is.na(LSOA11CD)) %>%
-    select(LSOA11CD, Shape__Area) %>% as_tibble() %>%
-    group_by(LSOA11CD) %>% slice(1L) %>%
-    filter(Shape__Area > quantile(boundaries$Shape__Area, 0.66)) %>%
-    pull(LSOA11CD)
+  lsoa21cds_that_should_use_nearest_place <- places %>%
+    filter(!is.na(LSOA21CD)) %>%
+    select(LSOA21CD, SHAPE_Area) %>% as_tibble() %>%
+    group_by(LSOA21CD) %>% slice(1L) %>%
+    filter(SHAPE_Area > quantile(boundaries$SHAPE_Area, 0.66)) %>%
+    pull(LSOA21CD)
 
   possible_places <- places %>% 
-    filter(LSOA11CD %in% lsoa11cds_that_should_use_nearest_place)
+    filter(LSOA21CD %in% lsoa21cds_that_should_use_nearest_place)
 
   centroids_for_distances <- possible_places %>%
-    select(LSOA11CD) %>% st_drop_geometry() %>% 
-    left_join(centroids, by='LSOA11CD')
+    select(LSOA21CD) %>% st_drop_geometry() %>% 
+    left_join(centroids, by='LSOA21CD')
 
   st_geometry(centroids_for_distances) <- centroids_for_distances$geometry
 
-  possible_places$distance_to_lsoa11_centroid <- 
+  possible_places$distance_to_lsoa21_centroid <- 
     possible_places %>%
     st_distance(centroids_for_distances, by_element=TRUE)
 
   possible_places <- possible_places %>% 
-    mutate(adjusted_distance = distance_multiplier * distance_to_lsoa11_centroid)
+    mutate(adjusted_distance = distance_multiplier * distance_to_lsoa21_centroid)
 
   chosen_places <- possible_places %>%
-    group_by(LSOA11CD) %>% arrange(LSOA11CD, adjusted_distance) %>% slice(1L) %>% 
-    mutate(distance_to_lsoa11_centroid_metres = as.integer(distance_to_lsoa11_centroid)) %>%
+    group_by(LSOA21CD) %>% arrange(LSOA21CD, adjusted_distance) %>% slice(1L) %>% 
+    mutate(distance_to_lsoa21_centroid_metres = as.integer(distance_to_lsoa21_centroid)) %>%
     rename(place_name = name) %>%
-    select(LSOA11CD, place_type, place_name, distance_to_lsoa11_centroid_metres) %>% rename(geometry=geom)
+    select(LSOA21CD, place_type, place_name, distance_to_lsoa21_centroid_metres) %>% rename(geometry=geom)
 
   #
   # For the remaining LSOAs, we just use the centroid
   #
 
   centroids_for_remaining_lsoas <- centroids %>%
-    filter(!(LSOA11CD %in% chosen_places$LSOA11CD)) %>%
+    filter(!(LSOA21CD %in% chosen_places$LSOA21CD)) %>%
     mutate(
       place_type = 'Population-weighted centroid',
-      distance_to_lsoa11_centroid_metres = 0L, place_name=NA_character_) %>%
-    select(LSOA11CD, place_type, place_name, distance_to_lsoa11_centroid_metres)
+      distance_to_lsoa21_centroid_metres = 0L, place_name=NA_character_) %>%
+    select(LSOA21CD, place_type, place_name, distance_to_lsoa21_centroid_metres)
 
   st_geometry(centroids_for_remaining_lsoas) <- centroids_for_remaining_lsoas$geometry
 
   lsoa_place_points <- chosen_places %>% rbind(centroids_for_remaining_lsoas)
   stopifnot(nrow(lsoa_place_points) == nrow(centroids))
 
-  unlink("output/lsoa11_place_points.geojson")
-  lsoa_place_points %>% st_write("output/lsoa11_place_points.geojson")
+  unlink("output/lsoa21_place_points.geojson")
+  lsoa_place_points %>% st_write("output/lsoa21_place_points.geojson")
 
 }
